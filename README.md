@@ -9,7 +9,7 @@ course.) If you try to do anything serious with it, well, good luck.
 Installation
 ------------
 
-This presumes that [https://github.com/tpope/vim-pathogen pathogen] (or
+This presumes that [pathogen](https://github.com/tpope/vim-pathogen) (or
 some similar bundle loader) has been installed. If you use `bzr`, make
 sure that the `bzr-git` plugin is installed.
 
