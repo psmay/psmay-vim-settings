@@ -1,4 +1,9 @@
 
+" This script makes it so that you can flip through tabs of 2, 4, and 8 easily
+" using the command :TG.
+"
+" I didn't originate this one.
+
 " Cycle tab stops
 function! Toggle_Tab_Width()
 	if &ts == 2

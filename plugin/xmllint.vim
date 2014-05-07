@@ -1,8 +1,17 @@
 
-let s:xmllint="XMLLINT_INDENT='	' xmllint --encode UTF-8"
+" This script adds :XLTAB and :XNSCLEAN as quick XML tidy commands, which are
+" based on xmllint. :XLTAB runs xmllint --format using tab indentation (unless
+" you change g:xmllint_indent). It also ditches redundant namespaces, recodes
+" to UTF-8, and tells you where you screwed up (at which point you undo, make
+" corrections, and rerun). :XNSCLEAN does the same without reindenting.
+"
+" All caveats concerning xmllint apply.
+
+let g:xmllint_indent="	"
+let g:xmllint="XMLLINT_INDENT='" . g:xmllint_indent . "' xmllint --encode UTF-8"
 
 function! Run_xmllint_command(cmd)
-	call ExecWithUnixShell("%!" . s:xmllint . " " . a:cmd)
+	call ExecWithUnixShell("%!" . g:xmllint . " " . a:cmd)
 	set ft=xml
 	set fileencoding=utf8
 	set ts=2 sw=2
@@ -11,7 +20,7 @@ endfunction
 function! Run_xmllint_format()
 	call Run_xmllint_command("--format --recover --nsclean -")
 endfunction
-command! XLT call Run_xmllint_format()
+command! XLTAB call Run_xmllint_format()
 
 function Run_xmllint_nsclean()
 	call Run_xmllint_command("--nsclean -")
