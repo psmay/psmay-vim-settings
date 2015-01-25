@@ -13,6 +13,6 @@ while(<>) {
 	# Use stars for lists
 	s/^((?:    )*)-(   )/$1*$2/g;
 	# Kill excessive backslashes
-	s/\\([<>&;*#~_])/$1/g;
+	s/\\([<>&;*#~_$])/$1/g;
 	say;
 }
