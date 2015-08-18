@@ -20,5 +20,15 @@ function! s:m2m(fromline, toline, p)
 	set ft=markdown
 endfunction
 
+function! s:m2m_norestyle(fromline, toline, p)
+	call s:setup()
+	let cmd = s:pandocMarkdownToMarkdown . a:p
+	let rs = a:fromline . "," . a:toline
+	call ExecWithUnixShell(rs . "!" . cmd)
+	set ft=markdown
+endfunction
+
 command! -range=% MDMD call s:m2m(<line1>,<line2>,'')
 command! -range=% MDMDW call s:m2m(<line1>,<line2>,' --no-wrap')
+command! -range=% MDMDA call s:m2m_norestyle(<line1>,<line2>,' --atx-headers')
+command! -range=% MDMDAW call s:m2m_norestyle(<line1>,<line2>,' --no-wrap --atx-headers')
