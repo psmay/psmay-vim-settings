@@ -16,6 +16,7 @@ function! s:m2m(fromline, toline, p)
 	call s:setup()
 	let cmd = s:pandocMarkdownToMarkdown . a:p . " | " . s:restylePandocMarkdownOutput
 	let rs = a:fromline . "," . a:toline
+	set fileencoding=utf-8
 	call ExecWithUnixShell(rs . "!" . cmd)
 	set ft=markdown
 endfunction
@@ -24,6 +25,7 @@ function! s:m2m_norestyle(fromline, toline, p)
 	call s:setup()
 	let cmd = s:pandocMarkdownToMarkdown . a:p
 	let rs = a:fromline . "," . a:toline
+	set fileencoding=utf-8
 	call ExecWithUnixShell(rs . "!" . cmd)
 	set ft=markdown
 endfunction

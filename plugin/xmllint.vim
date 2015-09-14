@@ -18,12 +18,17 @@ function! Run_xmllint_command(cmd)
 endfunction
 
 function! Run_xmllint_format()
-	call Run_xmllint_command("--format --recover --nsclean -")
+	call Run_xmllint_command("--encode UTF-8 --format --recover --nsclean -")
 endfunction
 command! XLTAB call Run_xmllint_format()
 
+function! Run_xmllint_format_to_ascii()
+	call Run_xmllint_command("--encode US-ASCII --format --recover --nsclean -")
+endfunction
+command! XMLLINTASCII call Run_xmllint_format_to_ascii()
+
 function Run_xmllint_nsclean()
-	call Run_xmllint_command("--nsclean -")
+	call Run_xmllint_command("--encode UTF-8 --nsclean -")
 endfunction
 command! XNSCLEAN call Run_xmllint_nsclean()
 
