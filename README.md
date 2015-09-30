@@ -10,9 +10,7 @@ Installation
 ------------
 
 This presumes that [pathogen](https://github.com/tpope/vim-pathogen) (or
-some similar bundle loader) has been installed. If you use `bzr`, make
-sure that the `bzr-git` plugin is installed.
+some similar bundle loader) has been installed.
 
     cd ~/.vim/bundle # Windows: cd %USERPROFILE%\vimfiles
-    bzr branch git+ssh://git@github.com/psmay/psmay-vim-settings.git,branch=master
-    # or: git clone git@github.com:psmay/psmay-vim-settings.git
+    git clone git@github.com:psmay/psmay-vim-settings.git
