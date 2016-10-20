@@ -1,6 +1,6 @@
 
 function! Run_yaml_fix()
-	call ExecWithUnixShell("%!perl -E 'use YAML::XS qw/LoadFile DumpFile/; use open qw/:std :utf8/; undef $/; $y=LoadFile(\\*STDIN); DumpFile(\\*STDOUT, $y)'")
+	call ExecWithUnixShell("%!python -c 'import sys; from yaml import safe_load, dump; data = safe_load(sys.stdin); sys.stdout.write(dump(data, default_flow_style=False, width=2147483647));'")
 endfunction
 command! YAMLPP call Run_yaml_fix()
 
