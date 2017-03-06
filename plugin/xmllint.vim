@@ -27,6 +27,16 @@ function! Run_xmllint_format_to_ascii()
 endfunction
 command! XMLLINTASCII call Run_xmllint_format_to_ascii()
 
+function! Run_xmllint_noblanks()
+	call Run_xmllint_command("--encode UTF-8 --noblanks --recover --nsclean -")
+endfunction
+command! XNOBLANKS call Run_xmllint_noblanks()
+
+function! Run_xmllint_canon()
+	call Run_xmllint_command("--encode UTF-8 --c14n --recover --nsclean -")
+endfunction
+command! XCANON call Run_xmllint_canon()
+
 function Run_xmllint_nsclean()
 	call Run_xmllint_command("--encode UTF-8 --nsclean -")
 endfunction
