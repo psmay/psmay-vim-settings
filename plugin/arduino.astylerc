@@ -1,0 +1,15 @@
+--style=linux
+--indent-classes
+--indent-switches
+--indent-cases
+--indent-namespaces
+--pad-oper
+--pad-header
+--unpad-paren
+-y
+--keep-one-line-blocks
+--keep-one-line-statements
+--indent=spaces=2
+--align-pointer=middle
+--align-reference=middle
+--mode=c
