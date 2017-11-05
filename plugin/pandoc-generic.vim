@@ -64,6 +64,22 @@ function s:pandoc_md_md(from_line, to_line, switches, filter_command)
 	set ft=markdown
 endfunction
 
+function s:pandoc_rst_rst(from_line, to_line, switches, filter_command)
+	call s:pandoc_filter('rst', 'rst', a:from_line, a:to_line, a:switches, a:filter_command)
+	set ft=markdown
+endfunction
+
+function s:pandoc_rst_md(from_line, to_line, switches, filter_command)
+	call s:pandoc_filter('rst', 'markdown', a:from_line, a:to_line, a:switches, a:filter_command)
+	set ft=markdown
+endfunction
+
+function s:pandoc_md_rst(from_line, to_line, switches, filter_command)
+	call s:pandoc_filter('markdown', 'rst', a:from_line, a:to_line, a:switches, a:filter_command)
+	set ft=markdown
+endfunction
+
+
 command! -range=% MDMD call s:pandoc_md_md(<line1>,<line2>,'',s:get_restyle_command())
 command! -range=% MDMDW call s:pandoc_md_md(<line1>,<line2>,'--no-wrap',s:get_restyle_command())
 command! -range=% MDMDA call s:pandoc_md_md(<line1>,<line2>,'--atx-headers','')
@@ -80,4 +96,9 @@ command! -range=% MDHTMLS call s:pandoc_md_html5(<line1>,<line2>,'--self-contain
 command! -range=% MDXHTML call s:pandoc_md_xhtml(<line1>,<line2>,'--self-contained','')
 command! -range=% MDXHTMLS call s:pandoc_md_xhtml(<line1>,<line2>,'--self-contained --standalone','')
 
-
+command! -range=% RSTRST call s:pandoc_rst_rst(<line1>,<line2>,'','')
+command! -range=% RSTRSTW call s:pandoc_rst_rst(<line1>,<line2>,'--no-wrap','')
+command! -range=% RSTMD call s:pandoc_rst_md(<line1>,<line2>,'--atx-headers','')
+command! -range=% RSTMDW call s:pandoc_rst_md(<line1>,<line2>,'--no-wrap --atx-headers','')
+command! -range=% MDRST call s:pandoc_md_rst(<line1>,<line2>,'','')
+command! -range=% MDRSTW call s:pandoc_md_rst(<line1>,<line2>,'--no-wrap','')
