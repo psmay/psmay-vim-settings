@@ -81,14 +81,14 @@ endfunction
 
 
 command! -range=% MDMD call s:pandoc_md_md(<line1>,<line2>,'',s:get_restyle_command())
-command! -range=% MDMDW call s:pandoc_md_md(<line1>,<line2>,'--no-wrap',s:get_restyle_command())
+command! -range=% MDMDW call s:pandoc_md_md(<line1>,<line2>,'--wrap=none',s:get_restyle_command())
 command! -range=% MDMDA call s:pandoc_md_md(<line1>,<line2>,'--atx-headers','')
-command! -range=% MDMDAW call s:pandoc_md_md(<line1>,<line2>,'--no-wrap --atx-headers','')
+command! -range=% MDMDAW call s:pandoc_md_md(<line1>,<line2>,'--wrap=none --atx-headers','')
 
 command! -range=% HTMLMD call s:pandoc_html_md(<line1>,<line2>,'','')
-command! -range=% HTMLMDW call s:pandoc_html_md(<line1>,<line2>,'--no-wrap','')
+command! -range=% HTMLMDW call s:pandoc_html_md(<line1>,<line2>,'--wrap=none','')
 command! -range=% HTMLMDA call s:pandoc_html_md(<line1>,<line2>,'--atx-headers','')
-command! -range=% HTMLMDAW call s:pandoc_html_md(<line1>,<line2>,'--no-wrap --atx-headers','')
+command! -range=% HTMLMDAW call s:pandoc_html_md(<line1>,<line2>,'--wrap=none --atx-headers','')
 
 command! -range=% MDHTML call s:pandoc_md_html5(<line1>,<line2>,'--self-contained','')
 command! -range=% MDHTMLS call s:pandoc_md_html5(<line1>,<line2>,'--self-contained --standalone','')
@@ -97,8 +97,8 @@ command! -range=% MDXHTML call s:pandoc_md_xhtml(<line1>,<line2>,'--self-contain
 command! -range=% MDXHTMLS call s:pandoc_md_xhtml(<line1>,<line2>,'--self-contained --standalone','')
 
 command! -range=% RSTRST call s:pandoc_rst_rst(<line1>,<line2>,'','')
-command! -range=% RSTRSTW call s:pandoc_rst_rst(<line1>,<line2>,'--no-wrap','')
+command! -range=% RSTRSTW call s:pandoc_rst_rst(<line1>,<line2>,'--wrap=none','')
 command! -range=% RSTMD call s:pandoc_rst_md(<line1>,<line2>,'--atx-headers','')
-command! -range=% RSTMDW call s:pandoc_rst_md(<line1>,<line2>,'--no-wrap --atx-headers','')
+command! -range=% RSTMDW call s:pandoc_rst_md(<line1>,<line2>,'--wrap=none --atx-headers','')
 command! -range=% MDRST call s:pandoc_md_rst(<line1>,<line2>,'','')
-command! -range=% MDRSTW call s:pandoc_md_rst(<line1>,<line2>,'--no-wrap','')
+command! -range=% MDRSTW call s:pandoc_md_rst(<line1>,<line2>,'--wrap=none','')
