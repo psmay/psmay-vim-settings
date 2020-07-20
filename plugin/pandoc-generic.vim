@@ -84,6 +84,8 @@ command! -range=% MDMD call s:pandoc_md_md(<line1>,<line2>,'',s:get_restyle_comm
 command! -range=% MDMDW call s:pandoc_md_md(<line1>,<line2>,'--wrap=none',s:get_restyle_command())
 command! -range=% MDMDA call s:pandoc_md_md(<line1>,<line2>,'--atx-headers','')
 command! -range=% MDMDAW call s:pandoc_md_md(<line1>,<line2>,'--wrap=none --atx-headers','')
+command! -range=% MDMDAR call s:pandoc_md_md(<line1>,<line2>,'--atx-headers',s:get_restyle_command())
+command! -range=% MDMDARW call s:pandoc_md_md(<line1>,<line2>,'--wrap=none --atx-headers',s:get_restyle_command())
 
 command! -range=% HTMLMD call s:pandoc_html_md(<line1>,<line2>,'','')
 command! -range=% HTMLMDW call s:pandoc_html_md(<line1>,<line2>,'--wrap=none','')
