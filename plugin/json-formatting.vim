@@ -62,3 +62,12 @@ function! s:Run_json_stringFromText(from_line, to_line)
 endfunction
 command! -range=% JSONSTR call s:Run_json_stringFromText(<line1>,<line2>)
 
+function! s:Run_json_linesFromText(from_line, to_line)
+	call ExecWithUnixShell(a:from_line . "," . a:to_line . "!perl -MJSON::PP -e '
+		\@_=<>;
+		\chomp for @_;
+		\print $j=JSON::PP->new->utf8->encode(\\@_);
+		\'")
+endfunction
+command! -range=% JSONLINES call s:Run_json_linesFromText(<line1>,<line2>)
+
