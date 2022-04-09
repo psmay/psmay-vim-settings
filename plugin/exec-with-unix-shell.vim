@@ -6,10 +6,19 @@
 " Windows-specific shell functionality isn't broken. If the current vim isn't
 " Windows-native, no substitution is made.
 "
-" When transliteration to Cygwin is enabled,
-" ExecWithUnixShell_slashCorrectedPath() accepts a string and return that
-" string with backslashes replaced by forward slashes. Otherwise, the
-" function returns its argument unmodified.
+" ExecWithUnixShell_target() returns "native" if it doesn't detect Windows,
+" "cygwin" if it detects Windows and a Cygwin installation, or "" if it
+" detects Windows but no Cygwin installation. Eventually I'd like to make it
+" possible to use WSL, but that's not currently happening.
+"
+" When the target is "cygwin", ExecWithUnixShell_slashCorrectedPath()
+" accepts a string and returns that string with backslashes replaced by
+" forward slashes. Otherwise, the function returns its argument unmodified.
+"
+" Similarly, when the target is "cygwin", ExecWithUnixShell_unixizedPath()
+" accepts a string and passes it to `cygpath -u` to get the Cygwin
+" counterpart of a Windows path. Otherwise, the function returns its
+" argument unmodified.
 "
 " Caveats:
 " * Cygwin is detected using the presence and expected behavior of `cygpath`
@@ -36,13 +45,20 @@ function! s:setup()
 			let g:execWithUnixShell_cygwinRoot = ""
 			if has('win32') || has('win64')
 				let g:execWithUnixShell_cygwinRoot = s:locateCygwinRoot()
+				if g:execWithUnixShell_cygwinRoot != ""
+					let s:target = "cygwin"
+				else
+					let s:target = ""
+				endif
+			else
+				let s:target = "native"
 			endif
 		endif
 
 		" If a Cygwin root is known (and g:execWithUnixShell_substitute is true),
 		" ExecWithUnixShell() will swap in /bin/bash --login -c for the shell
 		" settings. Otherwise, the default shell settings are used.
-		if g:execWithUnixShell_cygwinRoot != ""
+		if s:target == "cygwin"
 			if !exists('g:execWithUnixShell_substitute')
 				let g:execWithUnixShell_substitute = 1
 			endif
@@ -50,7 +66,7 @@ function! s:setup()
 				let g:execWithUnixShell_shell=g:execWithUnixShell_cygwinRoot . "/bin/bash"
 			endif
 			if !exists('g:execWithUnixShell_shellcmdflag')
-				let g:execWithUnixShell_shellcmdflag="--login -c"
+				let g:execWithUnixShell_shellcmdflag="--login --norc -c"
 			endif
 			if !exists('g:execWithUnixShell_shellxquote')
 				let g:execWithUnixShell_shellxquote="\""
@@ -69,6 +85,39 @@ endfunction
 function! s:slashCorrectedPath(path)
 	return substitute(a:path, '\\', '/', 'g')
 endfunction
+
+function! s:getCygpathForRoot(root)
+	if a:root == ""
+		" Empty root means use whatever is on PATH
+		return "cygpath"
+	else
+		return a:root . "/bin/cygpath"
+	endif
+endfunction
+
+function s:getCurrentCygpath()
+	call s:setup()
+	if s:target != "cygwin"
+		return ""
+	else
+		return s:getCygpathForRoot(g:execWithUnixShell_cygwinRoot)
+	endif
+endfunction
+
+" Passes a path to cygpath to get its Cygwin equivalent.
+function! s:cygpathUnixizedPath(path)
+	let l:escaped_path = shellescape(a:path)
+	let l:result = system(s:getCurrentCygpath() . " -u " . l:escaped_path)
+	let l:exit_code = v:shell_error
+
+	if l:exit_code == 0
+		" System result has some garbage at the end
+		return substitute(l:result, '\n$', '', '')
+	else
+		return ""
+	endif
+endfunction
+
 
 " cygpath is assumed to positively indicate the presence of a Cygwin
 " installation, and even without PATH properly set, calling `cygpath -w /`
@@ -94,12 +143,8 @@ endfunction
 " to guess using PATH.
 " Returns same as s:runCygpathToFindRootDir().
 function! s:guessAtCygwinRootUsingCygpath(guessedRoot)
-	let cygpath = a:guessedRoot . "/bin/cygpath"
-	if a:guessedRoot == ""
-		" If guessedRoot is empty, try a cygpath found in PATH
-		let cygpath = "cygpath"
-	endif
-	return s:runCygpathToFindRootDir(cygpath)
+	let l:cygpath = s:getCygpathForRoot(a:guessedRoot)
+	return s:runCygpathToFindRootDir(l:cygpath)
 endfunction
 
 " Guesses at Cygwin root for a few common possibilities. A guess based on
@@ -126,6 +171,20 @@ function! ExecWithUnixShell_slashCorrectedPath(path)
 	else
 		return a:path
 	endif
+endfunction
+
+function! ExecWithUnixShell_unixizedPath(path)
+	call s:setup()
+	if g:execWithUnixShell_substitute && g:execWithUnixShell_cygwinRoot != ""
+		return s:cygpathUnixizedPath(a:path)
+	else
+		return a:path
+	endif
+endfunction
+
+function! ExecWithUnixShell_target()
+	call s:setup()
+	return s:target
 endfunction
 
 function! ExecWithUnixShell(to_execute)
