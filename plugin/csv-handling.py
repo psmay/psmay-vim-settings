@@ -131,7 +131,7 @@ class IndentedWithCustomOutputFormatting(IndentedOutputFormatting):
         super().__init__(indent, 1)
 
 class SortKeysOutputFormatting():
-    def __init__(self, parseableValue):
+    def __init__(self):
         pass
 
     def dumps_parameters(self):
@@ -167,7 +167,7 @@ def main():
     indent_group.add_argument('--indented-with-tabs', metavar='NUMBER OF TABS', dest='indented', action=SingularStoreAction, type=IndentedWithTabsOutputFormatting)
     indent_group.add_argument('--indented-with', dest='indented', action=SingularStoreAction, type=IndentedWithCustomOutputFormatting)
 
-    parser.add_argument('--sort-keys', action=SingularStoreAction, type=SortKeysOutputFormatting)
+    parser.add_argument('--sort-keys', action=SingularStoreAction, const=SortKeysOutputFormatting())
     parser.add_argument('--trailing-newline', action=argparse.BooleanOptionalAction, default=True)
 
     parsed = parser.parse_args()
